@@ -17,6 +17,7 @@ Ensure you have the following installed:
 
 - [GitHub CLI (`gh`)](https://cli.github.com/)
 - `awk` and `base64` (available in most UNIX-based systems)
+- yq (install with `brew install yq` on macOS or `sudo apt-get install yq` on Ubuntu)
 
 ## Installation
 
@@ -35,6 +36,10 @@ Run the script with the following parameters:
 ```sh
 $ ./check_secrets.sh <workflow_name> <repo> <date_range>
 ```
+
+> [!NOTE]
+>
+> This has primarily been tested on macOS. If you encounter issues e.g with `sed` on other platforms, please let me know.
 
 ### Parameters:
 
