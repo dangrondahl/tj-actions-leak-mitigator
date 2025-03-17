@@ -25,18 +25,18 @@ echo "Checking runs for potential secret exposure..."
 
 for ID in $RUN_IDS; do
   # Count occurrences of potentially exposed secrets
-  COUNT=$(gh run view "$ID" --repo "$REPO" --log | awk '/##\[group\]changed-files$/ {in_range=1} in_range; /Using local .git directory/ {in_range=0}' | awk '{print $NF}' | wc -l)
+  COUNT=$(gh run view "$ID" --repo "$REPO" --log | awk '/##\[group\]changed-files$/ {in_range=1} in_range; /Using local .git directory/ {in_range=0}' | sed 's/^.*\([0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}T[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}\.[0-9]*Z\)/\1/' | awk '{$1=""; print $0}' | awk NF | wc -l)
 
   if [ "$COUNT" -gt 2 ]; then
     echo "⚠️  Potential secret exposure detected in run ID: $ID"
 
     # Extract and decode the secret
-    SECRET=$(gh run view "$ID" --repo "$REPO" --log | awk '/##\[group\]changed-files$/ {in_range=1} in_range; /Using local .git directory/ {in_range=0}' | awk '{print $NF}' | awk 'NR==2' | base64 -d | base64 -d 2>/dev/null)
+    SECRET=$(gh run view "$ID" --repo "$REPO" --log | awk '/##\[group\]changed-files$/ {in_range=1} in_range; /Using local .git directory/ {in_range=0}' | sed 's/^.*\([0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}T[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}\.[0-9]*Z\)/\1/' | awk '{$1=""; print $0}' | awk NF | awk 'NR==2' | base64 -d | base64 -d 2>/dev/null)
 
     if [ -n "$SECRET" ]; then
-      echo "🔓 Decoded secret: $SECRET"
+      echo "Decoded secret: $SECRET"
     else
-      echo "❌ Unable to decode the secret."
+      echo "Unable to decode the secret."
     fi
   else
     echo "✅ Run ID $ID appears safe."
