@@ -1,4 +1,4 @@
-# GitHub Actions Secret Exposure Detector
+# tj-actions Leak Mitigator
 
 ## Overview
 
