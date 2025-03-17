@@ -23,7 +23,7 @@ Ensure you have the following installed:
 Clone the repository and make the script executable:
 
 ```sh
-$ git clone https://github.com/your-org/github-actions-secret-detector.git
+$ git clone https://github.com/dangrondahl/tj-actions-leak-mitigator.git
 $ cd github-actions-secret-detector
 $ chmod +x check_secrets.sh
 ```
@@ -44,8 +44,22 @@ $ ./check_secrets.sh <workflow_name> <repo> <date_range>
 
 ### Example:
 
-```sh
-$ ./check_secrets.sh "ci.yml" "your-org/your-repo" "2025-03-14..2025-03-15"
+```bash
+./check_secrets.sh "ci.yml" "owner/repo" "2025-03-14..2025-03-15"
+Listing workflow runs for 'ci.yml' in repository 'owner/repo' from '2025-03-14..2025-03-15'...
+Checking runs for potential secret exposure...
+✅ Run ID <id> appears safe.
+✅ Run ID <id> appears safe.
+⚠️  Potential secret exposure detected in run ID: <id>
+🔓 Decoded secret: <secret>
+⚠️  Potential secret exposure detected in run ID: <id>
+🔓 Decoded secret: <secret>
+⚠️  Potential secret exposure detected in run ID: <id>
+🔓 Decoded secret: <secret>
+✅ Run ID <id> appears safe.
+...
+✅ Run ID <id> appears safe.
+Scan complete.
 ```
 
 ## Interpreting Results
@@ -71,3 +85,5 @@ This project is licensed under the MIT License.
 ## Acknowledgments
 
 Special thanks to StepSecurity for detecting this issue. See their detailed analysis: [StepSecurity Blog](https://www.stepsecurity.io/blog/harden-runner-detection-tj-actions-changed-files-action-is-compromised).
+
+Thanks to my colleagues @sivarama-p-raju and @ewelinawilkosz for the team work on it as well 🚀

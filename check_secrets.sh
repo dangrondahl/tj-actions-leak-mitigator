@@ -34,9 +34,9 @@ for ID in $RUN_IDS; do
     SECRET=$(gh run view "$ID" --repo "$REPO" --log | awk '/##\[group\]changed-files$/ {in_range=1} in_range; /Using local .git directory/ {in_range=0}' | awk '{print $NF}' | awk 'NR==2' | base64 -d | base64 -d 2>/dev/null)
 
     if [ -n "$SECRET" ]; then
-      echo "Decoded secret: $SECRET"
+      echo "🔓 Decoded secret: $SECRET"
     else
-      echo "Unable to decode the secret."
+      echo "❌ Unable to decode the secret."
     fi
   else
     echo "✅ Run ID $ID appears safe."
